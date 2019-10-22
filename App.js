@@ -1,19 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import Swiper from './Components/Swiper';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
+    <>
+      <Swiper swiperOptions={[{id: 1, text: 'Car 1'}, {id: 2, text: 'Car 2'}]}/>
+      <Swiper swiperOptions={[{id: 1, text: 'Josh'}, {id: 2, text: 'Marc'}, {id: 3, text: 'Mark'}]}/>
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
