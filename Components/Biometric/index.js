@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { Alert, TouchableOpacity, StyleSheet, Text, Platform } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 const Biometric = ({onSuccess}) => {
     const [compatible, setCompatibility] = useState(false);
@@ -18,30 +18,20 @@ const Biometric = ({onSuccess}) => {
         if (!biometricRecords) {
             // don't show fingerprint option
         } else {
-            handleLoginPress();
+            scanBiometrics();
         }
     }
 
-    const handleLoginPress = () => {
-        if (Platform.OS === 'android') {
-            showAndroidAlert();
-        } else {
-            scanBiometrics();
-        }
-    };
-
-    const showAndroidAlert = () => {
-        Alert.alert('Fingerprint Scan', 'Place your finger over the touch sensor.');
-        scanBiometrics();
-    };
 
     const scanBiometrics = async () => {
         let result = await LocalAuthentication.authenticateAsync();
+
         if (result.success) {
             onSuccess();
-            console.log('success');
             // ToastAndroid.show('Success!', ToastAndroid.LONG);
-        } else {
+        }
+        else {
+            checkBiometrics();
             console.log('failure')
             // ToastAndroid.show('Failure!', ToastAndroid.LONG);
         }
@@ -50,18 +40,19 @@ const Biometric = ({onSuccess}) => {
     useEffect(() => {
         checkDeviceHardware();
     }, []);
-    return (
-    <TouchableOpacity
-        onPress={
-            compatible ?
-                () => checkBiometrics() : null
 
+    useEffect(() => {
+        if(compatible) {
+            checkBiometrics();
         }
-        style={styles.button}>
-        <Text style={styles.buttonText}>
-            Bio Login
-        </Text>
-    </TouchableOpacity>);
+       
+    },[compatible])
+
+    return (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text>Press the fingerprint sensor to continue.</Text>
+        </View>
+    );
 }
 
 export default Biometric;
